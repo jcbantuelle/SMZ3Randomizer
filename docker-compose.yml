@@ -1,0 +1,26 @@
+version: '2'
+services:
+    smz3:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 80:80
+        depends_on:
+            - postgres
+        container_name: smz3
+
+    migration:
+        build:
+            context: .
+            dockerfile: docker/migration/Dockerfile
+        volumes:
+            - .:/app:rw
+        depends_on:
+            - postgres
+
+    postgres:
+        image: postgres:11.6
+        ports:
+            - 5432:5432
+        env_file: ./docker/postgres/config
